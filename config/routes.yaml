@@ -1,0 +1,30 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+get_user:
+    path: /User/{uuid}
+    controller: App\Controller\UserController::getUserByUuid
+    methods: GET
+
+create_user:
+    path: /User
+    controller: App\Controller\UserController::createUser
+    methods: POST
+
+create_category:
+    path: /Category
+    controller: App\Controller\CategoryController::createCategory
+    methods: POST
+
+get_user_categoryes:
+    path: /GetUserCategoryes/{uuid}
+    controller: App\Controller\CategoryController::getUserCategories
+    methods: GET
+
+payment_revolut:
+    path: /payment/revolut
+    controller: App\Controller\PaymentController::createPayment
+    methods: POST
