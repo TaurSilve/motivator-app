@@ -2,25 +2,51 @@
 
 namespace App\Controller;
 
-use App\Service\RevolutService;
+use App\Service\PaypalService;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Exclude;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * class PaymentController controll payment methods.
+ */
 class PaymentController extends AbstractController
 {
-  private RevolutService $revolutService;
+  private PaypalService $paypalService;
 
-  public function __construct(RevolutService $revolutService)
+  public function __construct(PaypalService $paypalService)
   {
-    $this->revolutService = $revolutService;
+    $this->paypalService = $paypalService;
   }
 
-  #[Route('/payment/revolut', name: 'payment_revolut', methods: ['POST'])]
+  #[Route('/CreateOrder', name: 'payment_paypal_create_order', methods: ['POST'])]
   public function createPayment(): JsonResponse
   {
-    $payment = $this->revolutService->createPaymentLink(50.0, 'USD');
+    try {
+      $payment = $this->paypalService->createOrder();
+    } catch (\Exception $e) {
+      throw new Exception($e->getMessage());
+    }
 
-    return $this->json(['payment_url' => $payment['checkout_url']]);
+    return $payment;
+  }
+
+  #[Route('/CaptureOrder/{orderId}', name: 'payment_paypal_capture_order', methods: ['POST'])]
+  public function captureOrder(string $orderId): JsonResponse
+  {
+    if (null === $orderId) {
+      throw new \Exception('Please provide valid order Id!');
+    }
+
+    try {
+      $payment = $this->paypalService->captureOrder($orderId);
+    } catch (\Exception $e) {
+      throw new Exception($e->getMessage());
+    }
+
+    return $payment;
   }
 }
