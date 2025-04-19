@@ -35,7 +35,6 @@ class PaypalService
   public function createOrder(): JsonResponse
   {
     $accessToken = $this->obtainPaypalAccessToken();
-
     if (null === $accessToken) {
       throw new \Exception('Something is wrong, please try later.');
     }
@@ -64,7 +63,6 @@ class PaypalService
   public function captureOrder($orderId): JsonResponse
   {
     $accessToken = $this->obtainPaypalAccessToken();
-
     if (null === $accessToken) {
       throw new \Exception('Something is wrong, please try later.');
     }
@@ -84,7 +82,6 @@ class PaypalService
   public function approveOrder($orderId): JsonResponse
   {
     $accessToken = $this->obtainPaypalAccessToken();
-
     if (null === $accessToken) {
       throw new \Exception('Something is wrong, please try later.');
     }

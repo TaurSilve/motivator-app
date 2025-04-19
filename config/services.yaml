@@ -8,6 +8,9 @@ parameters:
     paypal_client_id: '%env(PAYPAL_CLIENT_ID)%'
     paypal_access_token: '%env(PAYPAL_ACCCESS_TOKEN)%'
     paypal_orders: '%env(PAYPAL_ORDERS)%'
+    aws_bucket_name: '%env(AWS_BUCKET_NAME)%'
+    aws_access_key_id: '%env(AWS_ACCESS_KEY_ID)%'
+    aws_secret_access_key: '%env(AWS_SECRET_ACCESS_KEY)%'
 
 services:
     Ramsey\Uuid\Validator\GenericValidator: ~
@@ -22,6 +25,7 @@ services:
             $jwtManager: '@lexik_jwt_authentication.jwt_manager'
         tags: ['controller.service_arguments']
     App\Service\PaypalService: ~
+    App\Service\UploadService: ~
 
     # App\EventListener\AccessMiddleware:
     #     tags:
@@ -35,6 +39,9 @@ services:
             string $paypalClientId: '%paypal_client_id%'
             string $paypalAccessToken: '%paypal_access_token%'
             string $paypalOrders: '%paypal_orders%'
+            string $awsBucket: '%aws_bucket_name%'
+            string $awsKeyId: '%aws_access_key_id%'
+            string $awsSecretKey: '%aws_secret_access_key%'
     # Automatically registers your services as commands, event subscribers, etc.
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

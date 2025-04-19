@@ -33,3 +33,8 @@ payment_paypal_capture_order:
     path: /CaptureOrder/{orderId}
     controller: App\Controller\PaymentController::captureOrder
     methods: POST
+
+upload_file:
+    path: /UploadFile
+    controller: App\Controller\UploadController::uploadFile
+    methods: POST
