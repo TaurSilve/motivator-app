@@ -26,6 +26,8 @@ services:
         tags: ['controller.service_arguments']
     App\Service\PaypalService: ~
     App\Service\UploadService: ~
+    Aws\S3\S3Client:
+        factory: ['Aws\S3\S3Client', 'factory']
 
     # App\EventListener\AccessMiddleware:
     #     tags:

@@ -37,18 +37,28 @@ class AccessMiddleware extends AbstractController
   public function isAuthorizedRequest(RequestEvent $event)
   {
     $request = $event->getRequest();
+    $path = $request->getPathInfo();
+
+    $excludedPaths = [
+      '/api/login_check' // TO DO: move to the propper place
+    ];
+
+    if (in_array($path, $excludedPaths, true)) {
+      return;
+    }
+
     $token = $request->headers->get('Authorization');
     $authHeader = $request->headers->get('Authorization');
-    // if (!$authHeader || !preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
-    //   throw new UnauthorizedHttpException('Bearer', 'JWT Token not found');
-    // }
+    if (!$authHeader || !preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
+      throw new UnauthorizedHttpException('Bearer', 'JWT Token not found');
+    }
 
-    // $userUuid = $this->jwtManager->parse(substr($token, self::POSITION_FOR_SUBSTRING))['username'];
-    // if (!$userUuid) {
-    //   throw $this->createAccessDeniedException('Request Denied!');
-    // }
+    $userUuid = $this->jwtManager->parse(substr($token, self::POSITION_FOR_SUBSTRING))['username'];
+    if (!$userUuid) {
+      throw $this->createAccessDeniedException('Request Denied!');
+    }
 
-    // $user = $this->userRepository->getByUuid($userUuid);
-    // $this->authService->hasRoles([RolesEnum::REGULAR_USER->value], $user);
+    $user = $this->userRepository->getByUuid($userUuid);
+    $this->authService->hasRoles([RolesEnum::REGULAR_USER->value], $user);
   }
 }
